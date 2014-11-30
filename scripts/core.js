@@ -12,9 +12,11 @@ var __pickr = (function(){
 		colorHistory = undefined,
 		difficulty = 0,
 		score = 0,
+		highScore = 0,
 		lives = 5,
 		counters = undefined,
 		scoreDisplay = undefined,
+		highScoreDisplay = undefined,
 		difficultyDisplay = undefined,
 		livesDisplay = undefined;
 
@@ -52,6 +54,8 @@ var __pickr = (function(){
 		difficulty = 0;
 		correctSelections = [];
 		colorHistory.innerHTML = "";
+		difficultyDisplay.innerHTML = "Difficulty x" + difficulty;
+		scoreDisplay.innerHTML = "Score 0";
 	}
 
 	function gameOver(){
@@ -69,6 +73,10 @@ var __pickr = (function(){
 		gameOverView.setAttribute('data-is-active-view', 'true');
 
 		document.getElementById('finalScore').innerHTML = "You scored " + score + "!";
+
+		if(score > highScore){
+			highScore = score;
+		}
 
 	}
 
@@ -104,11 +112,17 @@ var __pickr = (function(){
 
 		})(element);
 
+		livesDisplay[5 - lives].setAttribute('data-lost', 'true');
+
 		if(lives - 1 > 0){
-			livesDisplay[5 - lives].setAttribute('data-lost', 'true');
 			lives -= 1;
 		} else {
-			gameOver();
+
+			setTimeout(function(){
+				gameOver();
+			}, 1000);
+
+			
 		}
 
 	}
@@ -122,6 +136,12 @@ var __pickr = (function(){
 
 		correctSelections.push(thisRGB);
 		score += Math.ceil(1 * difficulty);
+
+		if(score > highScore){
+			highScore = score;
+			highScoreDisplay.innerHTML = "High score " + highScore;
+			localStorage.setItem('highScore', highScore);
+		}
 
 		resetGame();
 		newSet();
@@ -212,6 +232,7 @@ var __pickr = (function(){
 
 		difficultyDisplay.innerHTML = "Difficulty x" + difficulty;
 		scoreDisplay.innerHTML = "Score " + score;
+		highScoreDisplay.innerHTML = "High score " + highScore;
 
 		newColor();
 		newMutant();
@@ -262,8 +283,16 @@ var __pickr = (function(){
 		colorHistory = document.getElementById('colorHistory');
 		counters = document.getElementById('counters');
 		scoreDisplay = document.getElementById('score');
+		highScoreDisplay = document.getElementById('highScore');
 		difficultyDisplay = document.getElementById('difficultyFactor');
 		livesDisplay = document.getElementById('lives').getElementsByClassName('life');
+
+		var storedHighScore = localStorage.getItem('highScore');
+
+		if(storedHighScore !== null){
+			highScore = storedHighScore;
+			highScoreDisplay.innerHTML = "High score" + highScore;
+		}
 
 		addEvents();
 
