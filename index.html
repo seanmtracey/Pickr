@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<title>Colors Game</title>
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="stylesheet" href="styles.css" type="text/css" />
+<link rel="stylesheet" href="animations.css" type="text/css" />
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+<!-- <link href='http://fonts.googleapis.com/css?family=Hind:400,500,600,700,300' rel='stylesheet' type='text/css'> -->
+</head>
+<body>
+
+<div id="startScreen" class="view" data-is-active-view="true">
+	<div id="welcomeControls">
+		<h1>Pickr</h1>
+		<p>One of these colors is not like the others!</p>
+		<p>Which one?</p>
+		<button id="begin">start</button>
+	</div>
+</div>
+
+<div id="gameHolder" class="view" data-is-active-view="false">
+
+	<div id="menuBtn">
+		<img src="./assets/images/menuBtn.png">
+	</div>
+
+	<div id="counters">
+		<h3 id="difficultyFactor">Difficulty x1</h3>
+		<h3 id="score">Score</h3>
+	</div>
+
+	<div id="gameGrid">
+
+		<span></span>
+		<span></span>
+		<span></span>
+		<span></span>
+		<span></span>
+		<span></span>
+		<span></span>
+		<span></span>
+		<span></span>
+		<span></span>
+		<span></span>
+		<span></span>
+		<span></span>
+		<span></span>
+		<span></span>
+		<span></span>
+
+	</div>
+
+	<div id="lives">
+
+		<span class="life">
+			<span class="liveLost"></span>
+			<img src="./assets/images/lives_inverted.png">
+		</span>
+
+		<span class="life">
+			<span class="liveLost"></span>
+			<img src="./assets/images/lives_inverted.png">
+		</span>
+
+		<span class="life">
+			<span class="liveLost"></span>
+			<img src="./assets/images/lives_inverted.png">
+		</span>
+
+		<span class="life">
+			<span class="liveLost"></span>
+			<img src="./assets/images/lives_inverted.png">
+		</span>
+
+		<span class="life">
+			<span class="liveLost"></span>
+			<img src="./assets/images/lives_inverted.png">
+		</span>
+
+	</div>
+
+	<div id="colorHistory">
+
+	</div>
+
+</div>
+
+<div id="gameOver" class="view" data-is-active-view="false">
+	<div id="retryControls">
+		<h1>GAME OVER</h1>
+		<button id="tryAgainBtn">try again?</button>
+		
+		<div id="commiserations">
+			<h3 id="finalScore">You scored 42</h3>
+			<!-- <p>You correctly picked out the following colors</p> -->
+
+			<!-- <ul> -->
+				<!-- <li><span></span><p></p></li> -->
+			<!-- </ul> -->
+
+		</div>
+
+	</div>
+
+
+</div>
+
+<script src="scripts/libraries/maths.js"></script>
+<script src="scripts/core.js"></script>
+</body>
+</html>

@@ -1,0 +1,232 @@
+@charset "UTF-8";
+/* CSS Document */
+
+*{
+	-webkit-transform: translateZ(0);
+	/*-webkit-perspective: 1000;*/
+	/*-webkit-backface-visibility: hidden;*/
+
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+
+}
+
+h1, h2, h3, h4, h5, h6, p, ul, li {
+	margin:0;
+	padding: 0;
+	color: #dcdcdc;
+	/*text-align: center;*/
+}
+
+html{
+	height:100%;
+	width:100%;
+	background-color:rgb(245,245,245);
+	background-position:center 0px;
+	background-size:100%;
+
+}
+
+body{
+	font-family: 'Hind', Arial, Helvetica, sans-serif;
+	font-size:12pt;
+	margin:0px;
+	background-attachment: scroll;
+	background-repeat: repeat-y;
+	width:100%;
+	height:100%;
+}
+
+h3{
+	font-size: 22px;
+}
+
+p{
+	font-size: 12px;
+	color: rgba(0,0,0,0.4);
+}
+
+button{
+	border: 0px solid black;
+	width: 200px;
+	border-radius: 50px;
+	padding: 10px;
+	color: white;
+	margin-top: 10px;
+	cursor: pointer;
+}
+
+.view{
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	text-align: center;
+}
+
+.view[data-is-active-view=false]{
+	display: none;
+}
+
+#startScreen #welcomeControls{
+	width: 300px;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin-top: -100px;
+	margin-left: -150px;
+}
+
+#startScreen #welcomeControls h1{
+	color:#dcdcdc;
+}
+
+#startScreen #welcomeControls button{
+	background: #36a5eb;
+}
+
+#menuBtn{
+	position: fixed;
+	left: 10px;
+	top: 10px;
+	cursor: pointer;
+}
+
+#menuBtn img{
+	width: 30px;
+	height: 30px;
+}
+
+#counters{
+	width: 250px;
+	position: fixed;
+	right: 10px;
+	top: 10px;
+	text-align: right;
+}
+
+#counters h3{
+	font-size: 22px;
+	color: #DCDCDC;
+	font-weight: 800;
+	margin: 0px;
+	padding: 0px;
+	line-height: 1.2em;
+}
+
+#gameGrid{
+	width: 335px;
+	height: 335px;
+	/*background: grey;*/
+	/*border:1px solid rgba(0,0,0,0.1);*/
+	margin: 0 auto 0 auto;
+	position: relative;
+	top: 50%;
+	margin-top: -168px;
+}
+
+#gameGrid span{
+	width: 80px;
+	height: 80px;
+	display: inline-block;
+	background-color: rgba(0,0,0,0.1);
+	cursor: pointer;
+	float: left;
+	margin-right: 3px;
+	margin-bottom: 3px;
+	/*border: 1px solid black;*/
+}
+
+#lives{
+	width: 242px;
+	height: 65px;
+	/*background-color: #F00;*/
+	position: fixed;
+	bottom: 20px;
+	left: 50%;
+	margin-left: -115px;
+}
+
+#lives span{
+	width: 45px;
+	height: 45px;
+	/*background-image: url('./assets/images/lives_inverted.png');*/
+	background-size: 100%;
+	background-position: 50%;
+	background-repeat: no-repeat;
+	display: inline-block;
+	background-color: #dcdcdc;
+	overflow: hidden;
+}
+
+#lives span img{
+	width: 45px;
+	height: 45px;
+	position: relative;
+	top: -54px;
+	display: inline-block;
+}
+
+#lives span.life span{
+	background-color: #fb8989;
+	width: 45px;
+	height: 45px;
+	background-image: none;
+
+	transition: -webkit-transform 0.3s ease-in-out, -moz-transform 0.3s ease-in-out, transform 0.3s ease-in-out;
+	
+	-webkit-transform: translateY(45px);
+	-moz-transform: translateY(45px);
+	transform: translateY(45px);
+}
+
+#lives span.life[data-lost=true] span{
+	-webkit-transform: translateY(0px);
+	-moz-transform: translateY(0px);
+	transform: translateY(0px);
+}
+
+/*#lives span.lost{
+	background-image: url('./assets/images/lives_lost.png');
+}*/
+
+#colorHistory{
+	width: 100%;
+	position: fixed;
+	bottom: 0;
+	height: 20px;
+	background-color: #dcdcdc;
+	overflow-y:hidden;
+	overflow-x:scroll;
+}
+
+#colorHistory span{
+	width: 10px;
+	display: inline-block;
+	float: left;
+	height: 100%;
+}
+
+#gameOver #retryControls{
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-top: -100px;
+	margin-left: -150px;
+	width: 300px;
+}
+
+#gameOver #retryControls h1{
+	color: #fb8989;
+}
+
+#gameOver #retryControls #tryAgainBtn{
+	background: none repeat scroll 0% 0% rgb(126, 241, 145);
+}
+
+#gameOver #retryControls #finalScore{
+	margin-top: 15px;
+}
