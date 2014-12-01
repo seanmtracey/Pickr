@@ -246,6 +246,7 @@ button{
 
 	#lives{
 		-webkit-transform: scale(0.5);
+		-webkit-transform: translateY(15px);
 		transform: scale(0.5) translateY(15px);
 	}
 
@@ -258,6 +259,24 @@ button{
 	#gameGrid span{
 		width: 67px;
 		height: 67px;
+	}
+
+}
+
+@media all and (max-height: 395px){
+
+	#counters{
+		margin-top: 3px;
+	}
+
+	#counters h3{
+		display: inline-block;
+		margin-right: 5px;
+	}
+
+	#lives{
+		-webkit-transform: scale(0.5) translateY(45px);
+		transform: scale(0.5) translateY(45px);
 	}
 
 }
