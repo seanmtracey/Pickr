@@ -19,6 +19,7 @@ var __pickr = (function(){
 		highScoreDisplay = undefined,
 		difficultyDisplay = undefined,
 		livesDisplay = undefined,
+		colorDisplay = undefined,
 		boop = undefined,
 		canInteract = true;
 
@@ -148,17 +149,33 @@ var __pickr = (function(){
 
 			g += 1;
 		}
+
+		colorDisplay.innerHTML = "";
+
 	}
 
 	function gameOver(){
 
-		var c = 0;
+		var c = 0,
+			ca = 0;
 
 		while(c < livesDisplay.length){
 
 			livesDisplay[c].setAttribute('data-lost', 'false');
 
 			c += 1;
+		}
+
+		while(ca < correctSelections.length){
+
+			var swatch = document.createElement('li');
+
+			swatch.style.backgroundColor = "rgb(" + correctSelections[ca].r + "," + correctSelections[ca].g + "," + correctSelections[ca].b + ")";
+
+			colorDisplay.appendChild(swatch);
+
+			ca += 1;
+
 		}
 
 		gameHolder.setAttribute('data-is-active-view', 'false');
@@ -441,6 +458,7 @@ var __pickr = (function(){
 		scoreDisplay = document.getElementById('score');
 		highScoreDisplay = document.getElementById('highScore');
 		difficultyDisplay = document.getElementById('difficultyFactor');
+		colorDisplay = document.getElementById('youPicked');
 		livesDisplay = document.getElementById('lives').getElementsByClassName('life');
 
 		var storedHighScore = localStorage.getItem('highScore');

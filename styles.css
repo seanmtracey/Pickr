@@ -245,6 +245,27 @@ button{
 	margin-top: 15px;
 }
 
+#gameOver #commiserations ul, #gameOver #commiserations ul li{
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+
+#gameOver #commiserations ul{
+	max-height: 100px;
+	overflow: scroll;
+	-webkit-overflow-scrolling: touch;
+	width: 300px;
+	border-radius: 5px;
+}
+
+#gameOver #commiserations ul li{
+	width: 100%;
+	height: 20px;
+	display: block;
+	margin-bottom: 1px;
+}
+
 @media all and (max-width: 500px){
 
 	#counters h3{
