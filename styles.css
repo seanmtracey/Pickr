@@ -143,7 +143,14 @@ button{
 	float: left;
 	margin-right: 3px;
 	margin-bottom: 3px;
+	transition: transform 0.5s;
 	/*border: 1px solid black;*/
+}
+
+#gameGrid span[data-reveal=true]{
+	transform: scale(1.2);
+	box-shadow: 0 0 10px black;
+	z-index: 1000;
 }
 
 #lives{

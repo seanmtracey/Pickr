@@ -19,7 +19,8 @@ var __pickr = (function(){
 		highScoreDisplay = undefined,
 		difficultyDisplay = undefined,
 		livesDisplay = undefined,
-		boop = undefined;
+		boop = undefined,
+		canInteract = true;
 
 	var animationTimes = {
 		quick : 300,
@@ -170,6 +171,7 @@ var __pickr = (function(){
 		}
 
 		localStorage.removeItem('storedGame');
+		canInteract = true;
 
 	}
 
@@ -182,6 +184,7 @@ var __pickr = (function(){
 				cells[b].removeEventListener(boop, incorrect, false);
 			} else {
 				cells[b].removeEventListener(boop, correct, false);
+				cells[b].setAttribute('data-reveal', 'false');
 			}
 
 			b += 1;
@@ -212,54 +215,64 @@ var __pickr = (function(){
 	function incorrect(evt){
 		console.log("incorrect");
 
-		var element = this;
+		if(canInteract){
+			var element = this;
 
-		element.setAttribute('class', 'wobble');
+			element.setAttribute('class', 'wobble');
 
-		(function(el){
+			(function(el){
 
-			setTimeout(function(){
-				el.setAttribute('class', '');
-			}, animationTimes.quick);
+				setTimeout(function(){
+					el.setAttribute('class', '');
+				}, animationTimes.quick);
 
-		})(element);
+			})(element);
 
-		livesDisplay[5 - lives].setAttribute('data-lost', 'true');
+			livesDisplay[5 - lives].setAttribute('data-lost', 'true');
 
-		if(lives - 1 > 0){
-			lives -= 1;
-		} else {
+			if(lives - 1 > 0){
+				lives -= 1;
+			} else {
 
-			setTimeout(function(){
-				gameOver();
-			}, 1000);
-			
+				cells[mutant].setAttribute('data-reveal', 'true');
+
+				canInteract = false;
+
+				setTimeout(function(){
+					gameOver();
+				}, 2000);
+				
+			}
+
+			updateGameState();
 		}
-
-		updateGameState();
 
 	}
 
 	function correct(){
 		// console.log("correct");
 
-		var newSwatch = document.createElement('span');
-		newSwatch.style.backgroundColor = "rgb(" + mutantRGB.r + "," + mutantRGB.g + "," + mutantRGB.b + ")"
-		colorHistory.appendChild(newSwatch);
+		if(canInteract){
 
-		correctSelections.push(mutantRGB);
-		score += Math.ceil(1 * difficulty);
+			var newSwatch = document.createElement('span');
+			newSwatch.style.backgroundColor = "rgb(" + mutantRGB.r + "," + mutantRGB.g + "," + mutantRGB.b + ")"
+			colorHistory.appendChild(newSwatch);
 
-		if(score > highScore){
-			highScore = score;
-			highScoreDisplay.innerHTML = "High score " + highScore;
-			localStorage.setItem('highScore', highScore);
+			correctSelections.push(mutantRGB);
+			score += Math.ceil(1 * difficulty);
+
+			if(score > highScore){
+				highScore = score;
+				highScoreDisplay.innerHTML = "High score " + highScore;
+				localStorage.setItem('highScore', highScore);
+			}
+
+			resetGame();
+			newSet();
+
+			updateGameState();
+
 		}
-
-		resetGame();
-		newSet();
-
-		updateGameState();
 
 	}
 
