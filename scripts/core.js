@@ -99,6 +99,17 @@ var __pickr = (function(){
 
 		}
 
+		var h = 0;
+
+		while(h < correctSelections.length){
+
+			var oldSwatch = document.createElement('span');
+			oldSwatch.style.backgroundColor = "rgb(" + correctSelections[h].r + "," + correctSelections[h].g + "," + correctSelections[h].b + ")"
+			colorHistory.appendChild(oldSwatch);
+
+			h += 1;
+
+		}
 
 		startScreen.setAttribute('data-is-active-view', 'false');
 		gameHolder.setAttribute('data-is-active-view', 'true');
