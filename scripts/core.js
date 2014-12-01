@@ -29,6 +29,10 @@ var __pickr = (function(){
 		longish : 100
 	}
 
+	var sounds = {
+		nope : document.getElementById('nope')
+	}
+
 	var thisRGB = {
 		r : 0,
 		g : 0,
@@ -247,6 +251,9 @@ var __pickr = (function(){
 
 			livesDisplay[5 - lives].setAttribute('data-lost', 'true');
 
+			sounds.nope.currentTime = 0;
+			// sounds.nope.play();
+			
 			if(lives - 1 > 0){
 				lives -= 1;
 			} else {
