@@ -133,7 +133,7 @@ var __pickr = (function(){
 	function resetValues(){
 		lives = 5;
 		score = 0;
-		difficulty = 0;
+		difficulty = 1;
 		correctSelections = [];
 		colorHistory.innerHTML = "";
 		difficultyDisplay.innerHTML = "Difficulty x" + difficulty;
