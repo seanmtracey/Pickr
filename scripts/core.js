@@ -30,9 +30,81 @@ var __pickr = (function(){
 		r : 0,
 		g : 0,
 		b : 0
+	},
+	mutantRGB = {
+		r : 0,
+		g : 0,
+		b : 0
 	}
 
 	var correctSelections = [];
+
+	function continueGame(game){
+		console.log(game);
+
+		resetGame();
+		resetValues();
+
+		thisRGB = game.thisRGB;
+		mutantRGB = game.mutantRGB;
+		mutant = game.mutant;
+		score = game.score;
+		correctSelections = game.correctSelections;
+		scoreDisplay.innerHTML = "Score " + score;
+		lives = game.lives;
+		highScoreDisplay.innerHTML = "High score " + localStorage.getItem('highScore');
+
+		var e = 0,
+			f = 5;
+
+		if(correctSelections.length <= 10){	
+			difficulty = 1;
+		} else if(correctSelections.length > 10 && correctSelections.length <= 20){
+			difficulty = 1.5;
+		} else if(correctSelections.length > 20 && correctSelections.length <= 30){
+			difficulty = 2;
+		} else if(correctSelections.length > 30 && correctSelections.length <= 40){
+			difficulty = 4;
+		} else if(correctSelections.length > 40 && correctSelections.length <= 50){
+			difficulty = 5;
+		} else {
+			difficulty = 8;
+		}
+
+		while(e < cells.length){
+
+			cells[e].style.backgroundColor = "rgb(" + thisRGB.r + "," + thisRGB.g + "," + thisRGB.b + ")";
+
+			if(e !== mutant){
+				cells[e].addEventListener('click', incorrect, false);	
+			}
+
+			e += 1;
+		}
+
+
+		cells[mutant].style.backgroundColor = "rgb(" + mutantRGB.r + "," + mutantRGB.g + "," + mutantRGB.b + ")";
+		cells[mutant].addEventListener('click', correct, false);
+
+		while(f > lives){
+
+			if(f > lives){
+				livesDisplay[5 - (f)].setAttribute('data-lost', 'true');	
+			} else {
+				livesDisplay[f - 1].setAttribute('data-lost', 'false');
+			}
+
+			f -= 1;
+
+		}
+
+
+		startScreen.setAttribute('data-is-active-view', 'false');
+		gameHolder.setAttribute('data-is-active-view', 'true');
+
+		//updateGameState();
+
+	}
 
 	function preloadImages(){
 
@@ -56,6 +128,15 @@ var __pickr = (function(){
 		colorHistory.innerHTML = "";
 		difficultyDisplay.innerHTML = "Difficulty x" + difficulty;
 		scoreDisplay.innerHTML = "Score 0";
+
+		var g = 0;
+
+		while(g < livesDisplay.length){
+
+			livesDisplay[g].setAttribute('data-lost', 'false');
+
+			g += 1;
+		}
 	}
 
 	function gameOver(){
@@ -78,6 +159,8 @@ var __pickr = (function(){
 			highScore = score;
 		}
 
+		localStorage.removeItem('storedGame');
+
 	}
 
 	function resetGame(){
@@ -94,6 +177,25 @@ var __pickr = (function(){
 			b += 1;
 
 		}
+
+	}
+
+	function updateGameState(){
+
+		var gameState = {
+			correctSelections : correctSelections,
+			thisRGB : thisRGB,
+			mutantRGB : mutantRGB,
+			mutant : mutant,
+			score : score,
+			highScore : highScore,
+			lives :lives
+		};
+
+		console.log("Current State:");
+		console.log(gameState);
+
+		localStorage.setItem('storedGame', JSON.stringify(gameState));
 
 	}
 
@@ -121,20 +223,21 @@ var __pickr = (function(){
 			setTimeout(function(){
 				gameOver();
 			}, 1000);
-
 			
 		}
+
+		updateGameState();
 
 	}
 
 	function correct(){
 		// console.log("correct");
 
-		var newColor = document.createElement('span');
-		newColor.style.backgroundColor = "rgb(" + thisRGB.r + "," + thisRGB.g + "," + thisRGB.b + ")"
-		colorHistory.appendChild(newColor);
+		var newSwatch = document.createElement('span');
+		newSwatch.style.backgroundColor = "rgb(" + mutantRGB.r + "," + mutantRGB.g + "," + mutantRGB.b + ")"
+		colorHistory.appendChild(newSwatch);
 
-		correctSelections.push(thisRGB);
+		correctSelections.push(mutantRGB);
 		score += Math.ceil(1 * difficulty);
 
 		if(score > highScore){
@@ -145,6 +248,8 @@ var __pickr = (function(){
 
 		resetGame();
 		newSet();
+
+		updateGameState();
 
 	}
 
@@ -169,7 +274,11 @@ var __pickr = (function(){
 	function drawGrid(mutant){
 
 		var a = 0,
-			rc = thisRGB,
+			rc = {
+				r : thisRGB.r,
+				g : thisRGB.g,
+				b : thisRGB.b
+			},
 			shouldInvert = Math.round(Math.random());
 
 		if(shouldInvert === 0){
@@ -186,11 +295,6 @@ var __pickr = (function(){
 
 			a += 1;
 		}
-
-		// console.log("Incorrect: rgb(" + rc.r + "," + rc.g + "," + rc.b + ")");
-
-		//Adjust the RGB value slightly for the mutant by the dominant color
-		//Discover dominant color
 
 		var cV = [rc.r, rc.g, rc.b].sort(function(a, b){
 			 return (b-a);
@@ -209,6 +313,9 @@ var __pickr = (function(){
 		cells[mutant].style.backgroundColor = "rgb(" + rc.r + "," + rc.g + "," + rc.b + ")";
 		cells[mutant].addEventListener('click', correct, false);
 
+		mutantRGB = rc;
+
+		//updateGameState();
 		// console.log("Correct: rgb(" + rc.r + "," + rc.g + "," + rc.b + ")");
 
 
@@ -238,12 +345,20 @@ var __pickr = (function(){
 		newMutant();
 		drawGrid(mutant);
 
+		updateGameState();
+
+	}
+
+	function checkSavedGame(){
+		return localStorage.getItem('storedGame');
 	}
 
 	function addEvents(){
 		
 		document.getElementById('begin').addEventListener('click', function(){
 
+			resetGame();
+			resetValues();
 			newSet();
 
 			startScreen.setAttribute('data-is-active-view', 'false');
@@ -263,10 +378,29 @@ var __pickr = (function(){
 		}, false);
 
 		document.getElementById('menuBtn').addEventListener('click', function(){
+			updateGameState();
+
+			document.getElementById('continueBtn').setAttribute('data-visible', 'true');
+
 			gameHolder.setAttribute('data-is-active-view', 'false');
 			gameOverView.setAttribute('data-is-active-view', 'false');
 			startScreen.setAttribute('data-is-active-view', 'true');
 		});
+			
+		var continueBtn = document.getElementById('continueBtn');
+
+		continueBtn.addEventListener('click', function(){
+		
+			if(checkSavedGame() !== null){
+				var storedGame = JSON.parse(localStorage.getItem('storedGame'));
+
+				continueGame(storedGame);
+
+			}
+
+		}, false);
+
+		
 
 	}
 
@@ -290,9 +424,14 @@ var __pickr = (function(){
 		var storedHighScore = localStorage.getItem('highScore');
 
 		if(storedHighScore !== null){
-			highScore = storedHighScore;
+			highScore = parseInt(storedHighScore);
 			highScoreDisplay.innerHTML = "High score" + highScore;
 		}
+
+		if(checkSavedGame() !== null){
+			continueBtn.setAttribute('data-visible', 'true');
+		}
+		
 
 		addEvents();
 
