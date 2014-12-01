@@ -94,6 +94,16 @@ button{
 	background-color: #5EDA72;
 }
 
+#startScreen #signYourWork{
+	text-decoration: none;
+	color: rgba(0, 0, 0, 0.3);
+	display: inline-block;
+	margin-top: 10px;
+	font-size: 12px;
+	width: 150px;
+	outline: 0px solid black;
+}
+
 #menuBtn{
 	position: fixed;
 	left: 10px;
