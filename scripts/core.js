@@ -30,7 +30,8 @@ var __pickr = (function(){
 	}
 
 	var sounds = {
-		nope : document.getElementById('nope')
+		nope : document.getElementById('nope'),
+		pop : document.getElementById('pop')
 	}
 
 	var thisRGB = {
@@ -251,9 +252,9 @@ var __pickr = (function(){
 
 			livesDisplay[5 - lives].setAttribute('data-lost', 'true');
 
-			sounds.nope.currentTime = 0;
+			// sounds.nope.currentTime = 0;
 			// sounds.nope.play();
-			
+
 			if(lives - 1 > 0){
 				lives -= 1;
 			} else {
@@ -277,6 +278,9 @@ var __pickr = (function(){
 		// console.log("correct");
 
 		if(canInteract){
+
+			// sounds.pop.currentTime = 0;
+			// sounds.pop.play();
 
 			var newSwatch = document.createElement('span');
 			newSwatch.style.backgroundColor = "rgb(" + mutantRGB.r + "," + mutantRGB.g + "," + mutantRGB.b + ")"
