@@ -18,7 +18,8 @@ var __pickr = (function(){
 		scoreDisplay = undefined,
 		highScoreDisplay = undefined,
 		difficultyDisplay = undefined,
-		livesDisplay = undefined;
+		livesDisplay = undefined,
+		boop = undefined;
 
 	var animationTimes = {
 		quick : 300,
@@ -76,7 +77,7 @@ var __pickr = (function(){
 			cells[e].style.backgroundColor = "rgb(" + thisRGB.r + "," + thisRGB.g + "," + thisRGB.b + ")";
 
 			if(e !== mutant){
-				cells[e].addEventListener('click', incorrect, false);	
+				cells[e].addEventListener(boop, incorrect, false);	
 			}
 
 			e += 1;
@@ -84,7 +85,7 @@ var __pickr = (function(){
 
 
 		cells[mutant].style.backgroundColor = "rgb(" + mutantRGB.r + "," + mutantRGB.g + "," + mutantRGB.b + ")";
-		cells[mutant].addEventListener('click', correct, false);
+		cells[mutant].addEventListener(boop, correct, false);
 
 		while(f > lives){
 
@@ -101,8 +102,6 @@ var __pickr = (function(){
 
 		startScreen.setAttribute('data-is-active-view', 'false');
 		gameHolder.setAttribute('data-is-active-view', 'true');
-
-		//updateGameState();
 
 	}
 
@@ -169,9 +168,9 @@ var __pickr = (function(){
 		while(b < cells.length){
 
 			if(b !== mutant){
-				cells[b].removeEventListener('click', incorrect, false);
+				cells[b].removeEventListener(boop, incorrect, false);
 			} else {
-				cells[b].removeEventListener('click', correct, false);
+				cells[b].removeEventListener(boop, correct, false);
 			}
 
 			b += 1;
@@ -290,7 +289,7 @@ var __pickr = (function(){
 			cells[a].style.backgroundColor = "rgb(" + rc.r + "," + rc.g + "," + rc.b + ")";
 
 			if(a !== mutant){
-				cells[a].addEventListener('click', incorrect, false);	
+				cells[a].addEventListener(boop, incorrect, false);	
 			}
 
 			a += 1;
@@ -311,13 +310,9 @@ var __pickr = (function(){
 		}
 
 		cells[mutant].style.backgroundColor = "rgb(" + rc.r + "," + rc.g + "," + rc.b + ")";
-		cells[mutant].addEventListener('click', correct, false);
+		cells[mutant].addEventListener(boop, correct, false);
 
 		mutantRGB = rc;
-
-		//updateGameState();
-		// console.log("Correct: rgb(" + rc.r + "," + rc.g + "," + rc.b + ")");
-
 
 	}
 
@@ -355,7 +350,7 @@ var __pickr = (function(){
 
 	function addEvents(){
 		
-		document.getElementById('begin').addEventListener('click', function(){
+		document.getElementById('begin').addEventListener(boop, function(){
 
 			resetGame();
 			resetValues();
@@ -366,7 +361,7 @@ var __pickr = (function(){
 
 		}, false);
 
-		document.getElementById('tryAgainBtn').addEventListener('click', function(){
+		document.getElementById('tryAgainBtn').addEventListener(boop, function(){
 
 			resetGame();
 			newSet();
@@ -377,7 +372,7 @@ var __pickr = (function(){
 
 		}, false);
 
-		document.getElementById('menuBtn').addEventListener('click', function(){
+		document.getElementById('menuBtn').addEventListener(boop, function(){
 			updateGameState();
 
 			document.getElementById('continueBtn').setAttribute('data-visible', 'true');
@@ -389,7 +384,7 @@ var __pickr = (function(){
 			
 		var continueBtn = document.getElementById('continueBtn');
 
-		continueBtn.addEventListener('click', function(){
+		continueBtn.addEventListener(boop, function(){
 		
 			if(checkSavedGame() !== null){
 				var storedGame = JSON.parse(localStorage.getItem('storedGame'));
@@ -400,8 +395,11 @@ var __pickr = (function(){
 
 		}, false);
 
-		
+	}
 
+	//Source from http://ctrlq.org/code/19616-detect-touch-screen-javascript
+	function is_touch_device() {
+		return (('ontouchstart' in window) || (navigator.MaxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0));
 	}
 
 	function init(){
@@ -432,6 +430,11 @@ var __pickr = (function(){
 			continueBtn.setAttribute('data-visible', 'true');
 		}
 		
+		if(!is_touch_device()){
+			boop = "click";
+		} else {
+			boop = "touchend";
+		}
 
 		addEvents();
 
