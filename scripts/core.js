@@ -63,7 +63,7 @@ var __pickr = (function(){
 		highScoreDisplay.innerHTML = "High score " + localStorage.getItem('highScore');
 
 		var e = 0,
-			f = 5;
+			f = 0;
 
 		if(correctSelections.length <= 10){	
 			difficulty = 1;
@@ -94,15 +94,15 @@ var __pickr = (function(){
 		cells[mutant].style.backgroundColor = "rgb(" + mutantRGB.r + "," + mutantRGB.g + "," + mutantRGB.b + ")";
 		cells[mutant].addEventListener(boop, correct, false);
 
-		while(f > lives){
+		while(f < 5){
 
-			if(f > lives){
-				livesDisplay[5 - (f)].setAttribute('data-lost', 'true');	
+			if(f < lives){
+				livesDisplay[f].setAttribute('data-lost', 'false');	
 			} else {
-				livesDisplay[f - 1].setAttribute('data-lost', 'false');
+				livesDisplay[f].setAttribute('data-lost', 'true');
 			}
 
-			f -= 1;
+			f += 1;
 
 		}
 
@@ -250,7 +250,7 @@ var __pickr = (function(){
 
 			})(element);
 
-			livesDisplay[5 - lives].setAttribute('data-lost', 'true');
+			livesDisplay[lives - 1].setAttribute('data-lost', 'true');
 
 			// sounds.nope.currentTime = 0;
 			// sounds.nope.play();
