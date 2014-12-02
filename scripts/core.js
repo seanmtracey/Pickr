@@ -190,16 +190,30 @@ var __pickr = (function(){
 		
 			timerDisplay.style.width = ((timeLeft / roundTime) * 100) + "%";
 
-			console.log(timeLeft);
+			// console.log(timeLeft);
 
 			if(timeLeft <= 0){
+
+				console.log(playingGame, currentTime, timeLeft);
+				playingGame = false;
 				updateGameState();
+				console.log("INC 1");
 				incorrect();
+
+				console.log(lives);
+
+				if(lives > 0){
+					resetGame();
+					newSet();	
+				}
+				
 			} else {
 				updateGameState();
-				window.requestAnimationFrame(drawTimer)
+				
 			}
 		}
+
+		window.requestAnimationFrame(drawTimer);
 
 	}
 
@@ -303,11 +317,11 @@ var __pickr = (function(){
 
 			// sounds.nope.currentTime = 0;
 			// sounds.nope.play();
-
+			
 			if(lives - 1 > 0){
 				lives -= 1;
 			} else {
-
+				lives -= 1;
 				cells[mutant].setAttribute('data-reveal', 'true');
 
 				canInteract = false;
@@ -447,7 +461,8 @@ var __pickr = (function(){
 		newColor();
 		newMutant();
 		drawGrid(mutant);
-		drawTimer();
+
+		playingGame = true;
 
 		updateGameState();
 
@@ -553,6 +568,7 @@ var __pickr = (function(){
 		}
 
 		addEvents();
+		drawTimer();
 
 		//setInterval(incorrect, 3000);
 
