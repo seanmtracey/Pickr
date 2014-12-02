@@ -20,8 +20,15 @@ var __pickr = (function(){
 		difficultyDisplay = undefined,
 		livesDisplay = undefined,
 		colorDisplay = undefined,
+		timerDisplay = undefined,
+		roundTime = 10000,
+		timeLeft = roundTime,
+		startTime = undefined,
 		boop = undefined,
-		canInteract = true;
+		canInteract = true,
+		playingGame = false;
+
+	 window.requestAnimationFrame = (window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame);
 
 	var animationTimes = {
 		quick : 300,
@@ -61,6 +68,14 @@ var __pickr = (function(){
 		scoreDisplay.innerHTML = "Score " + score;
 		lives = game.lives;
 		highScoreDisplay.innerHTML = "High score " + localStorage.getItem('highScore');
+		timeLeft = game.timeLeft;
+		// startTime = (Date.now() * 1) - (roundTime - timeLeft);
+
+		startTime = (Date.now() * 1) - (roundTime - timeLeft);
+
+		console.log(game);
+
+		console.log("(%f * 1) - (%f - %f)", Date.now() * 1, roundTime, timeLeft);
 
 		var e = 0,
 			f = 0;
@@ -118,6 +133,9 @@ var __pickr = (function(){
 
 		}
 
+		// startTime = Date.now() * 1;
+		drawTimer();
+
 		startScreen.setAttribute('data-is-active-view', 'false');
 		gameHolder.setAttribute('data-is-active-view', 'true');
 
@@ -156,6 +174,32 @@ var __pickr = (function(){
 		}
 
 		colorDisplay.innerHTML = "";
+
+	}
+
+	function drawTimer(){
+
+		/*if(startTime === undefined || startTime <= 0){
+			startTime = Date.now() * 1;
+		}*/
+
+		if(playingGame){
+			var currentTime = Date.now() * 1
+
+			timeLeft = roundTime - (currentTime - startTime);
+		
+			timerDisplay.style.width = ((timeLeft / roundTime) * 100) + "%";
+
+			console.log(timeLeft);
+
+			if(timeLeft <= 0){
+				updateGameState();
+				incorrect();
+			} else {
+				updateGameState();
+				window.requestAnimationFrame(drawTimer)
+			}
+		}
 
 	}
 
@@ -224,11 +268,12 @@ var __pickr = (function(){
 			mutant : mutant,
 			score : score,
 			highScore : highScore,
-			lives :lives
+			lives :lives,
+			timeLeft : timeLeft
 		};
 
-		console.log("Current State:");
-		console.log(gameState);
+		// console.log("Current State:");
+		// console.log(gameState);
 
 		localStorage.setItem('storedGame', JSON.stringify(gameState));
 
@@ -240,15 +285,19 @@ var __pickr = (function(){
 		if(canInteract){
 			var element = this;
 
-			element.setAttribute('class', 'wobble');
+			// console.log(element === window)
 
-			(function(el){
+			if(element !== window && element !== undefined){
+				element.setAttribute('class', 'wobble');
 
-				setTimeout(function(){
-					el.setAttribute('class', '');
-				}, animationTimes.quick);
+				(function(el){
 
-			})(element);
+					setTimeout(function(){
+						el.setAttribute('class', '');
+					}, animationTimes.quick);
+
+				})(element);
+			}
 
 			livesDisplay[lives - 1].setAttribute('data-lost', 'true');
 
@@ -263,6 +312,8 @@ var __pickr = (function(){
 
 				canInteract = false;
 
+				playingGame = false;
+				
 				setTimeout(function(){
 					gameOver();
 				}, 2000);
@@ -293,6 +344,11 @@ var __pickr = (function(){
 				highScore = score;
 				highScoreDisplay.innerHTML = "High score " + highScore;
 				localStorage.setItem('highScore', highScore);
+			}
+
+			if(correctSelections.length % 10 === 0 && lives < 5){
+				lives += 1;
+				livesDisplay[lives - 1].setAttribute('data-lost', 'false');
 			}
 
 			resetGame();
@@ -357,8 +413,6 @@ var __pickr = (function(){
 			rc.g += (increment * shouldInvert) / difficulty | 0; // * 0.7152;
 		} else if(cV[0] === rc.b){
 			rc.b += (increment * shouldInvert) / difficulty | 0; // / 0.0722;
-		} else {
-			console.log("It went wrong");
 		}
 
 		cells[mutant].style.backgroundColor = "rgb(" + rc.r + "," + rc.g + "," + rc.b + ")";
@@ -388,9 +442,12 @@ var __pickr = (function(){
 		scoreDisplay.innerHTML = "Score " + score;
 		highScoreDisplay.innerHTML = "High score " + highScore;
 
+		startTime = Date.now() * 1;
+
 		newColor();
 		newMutant();
 		drawGrid(mutant);
+		drawTimer();
 
 		updateGameState();
 
@@ -404,6 +461,8 @@ var __pickr = (function(){
 		
 		document.getElementById('begin').addEventListener(boop, function(){
 
+			playingGame = true;
+
 			resetGame();
 			resetValues();
 			newSet();
@@ -414,6 +473,8 @@ var __pickr = (function(){
 		}, false);
 
 		document.getElementById('tryAgainBtn').addEventListener(boop, function(){
+
+			playingGame = true;
 
 			resetGame();
 			newSet();
@@ -432,6 +493,7 @@ var __pickr = (function(){
 			gameHolder.setAttribute('data-is-active-view', 'false');
 			gameOverView.setAttribute('data-is-active-view', 'false');
 			startScreen.setAttribute('data-is-active-view', 'true');
+			playingGame = false;
 		});
 			
 		var continueBtn = document.getElementById('continueBtn');
@@ -440,7 +502,7 @@ var __pickr = (function(){
 		
 			if(checkSavedGame() !== null){
 				var storedGame = JSON.parse(localStorage.getItem('storedGame'));
-
+				playingGame = true;
 				continueGame(storedGame);
 
 			}
@@ -470,6 +532,7 @@ var __pickr = (function(){
 		highScoreDisplay = document.getElementById('highScore');
 		difficultyDisplay = document.getElementById('difficultyFactor');
 		colorDisplay = document.getElementById('youPicked');
+		timerDisplay = document.getElementById('runningOut');
 		livesDisplay = document.getElementById('lives').getElementsByClassName('life');
 
 		var storedHighScore = localStorage.getItem('highScore');
@@ -490,6 +553,8 @@ var __pickr = (function(){
 		}
 
 		addEvents();
+
+		//setInterval(incorrect, 3000);
 
 	}
 
