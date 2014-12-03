@@ -21,14 +21,14 @@ var __pickr = (function(){
 		livesDisplay = undefined,
 		colorDisplay = undefined,
 		timerDisplay = undefined,
-		roundTime = 10000,
+		roundTime = 8000,
 		timeLeft = roundTime,
 		startTime = undefined,
 		boop = undefined,
 		canInteract = true,
 		playingGame = false;
 
-	 window.requestAnimationFrame = (window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame);
+	window.requestAnimationFrame = (window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame);
 
 	var animationTimes = {
 		quick : 300,
@@ -55,7 +55,6 @@ var __pickr = (function(){
 	var correctSelections = [];
 
 	function continueGame(game){
-		// console.log(game);
 
 		resetGame();
 		resetValues();
@@ -69,13 +68,8 @@ var __pickr = (function(){
 		lives = game.lives;
 		highScoreDisplay.innerHTML = "High score " + localStorage.getItem('highScore');
 		timeLeft = game.timeLeft;
-		// startTime = (Date.now() * 1) - (roundTime - timeLeft);
 
 		startTime = (Date.now() * 1) - (roundTime - timeLeft);
-
-		// console.log(game);
-
-		// console.log("(%f * 1) - (%f - %f)", Date.now() * 1, roundTime, timeLeft);
 
 		var e = 0,
 			f = 0;
@@ -133,7 +127,6 @@ var __pickr = (function(){
 
 		}
 
-		// startTime = Date.now() * 1;
 		drawTimer();
 
 		startScreen.setAttribute('data-is-active-view', 'false');
@@ -179,32 +172,19 @@ var __pickr = (function(){
 
 	function drawTimer(){
 
-		/*if(startTime === undefined || startTime <= 0){
-			startTime = Date.now() * 1;
-		}*/
-
 		if(playingGame){
-			var currentTime = Date.now() * 1
+			var currentTime = Date.now() * 1;
 
 			timeLeft = roundTime - (currentTime - startTime);
 		
 			timerDisplay.style.width = ((timeLeft / roundTime) * 100) + "%";
 
-			// console.log(timeLeft);
-
 			if(timeLeft <= 0){
 
-				// console.log(playingGame, currentTime, timeLeft);
-				playingGame = false;
 				updateGameState();
-				// console.log("INC 1");
 				incorrect();
-
-				// console.log(lives);
-
 				if(lives > 0){
-					resetGame();
-					newSet();	
+					startTime = Date.now() * 1;	
 				}
 				
 			} else {
@@ -286,20 +266,14 @@ var __pickr = (function(){
 			timeLeft : timeLeft
 		};
 
-		// console.log("Current State:");
-		// console.log(gameState);
-
 		localStorage.setItem('storedGame', JSON.stringify(gameState));
 
 	}
 
 	function incorrect(evt){
-		// console.log("incorrect");
 
 		if(canInteract){
 			var element = this;
-
-			// console.log(element === window)
 
 			if(element !== window && element !== undefined){
 				element.setAttribute('class', 'wobble');
@@ -340,12 +314,8 @@ var __pickr = (function(){
 	}
 
 	function correct(){
-		// console.log("correct");
 
 		if(canInteract){
-
-			// sounds.pop.currentTime = 0;
-			// sounds.pop.play();
 
 			var newSwatch = document.createElement('span');
 			newSwatch.style.backgroundColor = "rgb(" + mutantRGB.r + "," + mutantRGB.g + "," + mutantRGB.b + ")"
@@ -532,8 +502,6 @@ var __pickr = (function(){
 	}
 
 	function init(){
-
-		// console.log("Initialised");
 		
 		startScreen = document.getElementById('startScreen');
 		gameHolder = document.getElementById('gameHolder');
@@ -569,8 +537,6 @@ var __pickr = (function(){
 
 		addEvents();
 		drawTimer();
-
-		//setInterval(incorrect, 3000);
 
 	}
 
