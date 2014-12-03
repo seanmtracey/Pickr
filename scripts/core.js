@@ -55,7 +55,7 @@ var __pickr = (function(){
 	var correctSelections = [];
 
 	function continueGame(game){
-		console.log(game);
+		// console.log(game);
 
 		resetGame();
 		resetValues();
@@ -73,9 +73,9 @@ var __pickr = (function(){
 
 		startTime = (Date.now() * 1) - (roundTime - timeLeft);
 
-		console.log(game);
+		// console.log(game);
 
-		console.log("(%f * 1) - (%f - %f)", Date.now() * 1, roundTime, timeLeft);
+		// console.log("(%f * 1) - (%f - %f)", Date.now() * 1, roundTime, timeLeft);
 
 		var e = 0,
 			f = 0;
@@ -194,13 +194,13 @@ var __pickr = (function(){
 
 			if(timeLeft <= 0){
 
-				console.log(playingGame, currentTime, timeLeft);
+				// console.log(playingGame, currentTime, timeLeft);
 				playingGame = false;
 				updateGameState();
-				console.log("INC 1");
+				// console.log("INC 1");
 				incorrect();
 
-				console.log(lives);
+				// console.log(lives);
 
 				if(lives > 0){
 					resetGame();
@@ -294,7 +294,7 @@ var __pickr = (function(){
 	}
 
 	function incorrect(evt){
-		console.log("incorrect");
+		// console.log("incorrect");
 
 		if(canInteract){
 			var element = this;
@@ -317,7 +317,7 @@ var __pickr = (function(){
 
 			// sounds.nope.currentTime = 0;
 			// sounds.nope.play();
-			
+
 			if(lives - 1 > 0){
 				lives -= 1;
 			} else {
