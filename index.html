@@ -18,7 +18,7 @@
 <!-- <link rel="apple-touch-icon" sizes="72x72" href="apple-touch-icon-ipad.png" /> -->
 <!-- <link rel="apple-touch-icon" sizes="114x114" href="apple-touch-icon-iphone-retina-display.png" /> -->
 
-<link href='http://fonts.googleapis.com/css?family=Hind:400,500,600,700,300' rel='stylesheet' type='text/css'>
+<!-- <link href='http://fonts.googleapis.com/css?family=Hind:400,500,600,700,300' rel='stylesheet' type='text/css'> -->
 </head>
 <body>
 
@@ -43,6 +43,7 @@
 		<h3 id="difficultyFactor">Difficulty x1</h3>
 		<h3 id="score">Score</h3>
 		<h3 id="highScore">High score 0</h3>
+		<h3 id="combo">0 in a row</h3>
 	</div>
 
 	<div id="gameGrid">
@@ -126,13 +127,18 @@
 
 
 <audio id="nope" preload>
-	<source src="./assets/sounds/nope.ogg" type="audio/ogg">
-	<source src="./assets/sounds/nope.mp3" type="audio/mpeg">
+	<source src="./assets/sounds/nope3.ogg" type="audio/ogg">
+	<source src="./assets/sounds/nope3.mp3" type="audio/mpeg">
 </audio> 
 
 <audio id="pop" preload>
-	<source src="./assets/sounds/pop2.ogg" type="audio/ogg">
-	<source src="./assets/sounds/pop2.mp3" type="audio/mpeg">
+	<source src="./assets/sounds/pop4.ogg" type="audio/ogg">
+	<source src="./assets/sounds/pop4.mp3" type="audio/mpeg">
+</audio> 
+
+<audio id="gameover_snd" preload>
+	<source src="./assets/sounds/game_over.ogg" type="audio/ogg">
+	<source src="./assets/sounds/game_over.mp3" type="audio/mpeg">
 </audio> 
 
 <script>

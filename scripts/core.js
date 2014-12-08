@@ -21,12 +21,14 @@ var __pickr = (function(){
 		livesDisplay = undefined,
 		colorDisplay = undefined,
 		timerDisplay = undefined,
+		comboDisplay = undefined,
 		roundTime = 8000,
 		timeLeft = roundTime,
 		startTime = undefined,
 		boop = undefined,
 		canInteract = true,
-		playingGame = false;
+		playingGame = false,
+		correctCount = 0;
 
 	window.requestAnimationFrame = (window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame);
 
@@ -38,7 +40,8 @@ var __pickr = (function(){
 
 	var sounds = {
 		nope : document.getElementById('nope'),
-		pop : document.getElementById('pop')
+		pop : document.getElementById('pop'),
+		gameOver : document.getElementById('gameover_snd')
 	}
 
 	var thisRGB = {
@@ -68,6 +71,7 @@ var __pickr = (function(){
 		lives = game.lives;
 		highScoreDisplay.innerHTML = "High score " + localStorage.getItem('highScore');
 		timeLeft = game.timeLeft;
+		correctCount = game.correctCount;
 
 		startTime = (Date.now() * 1) - (roundTime - timeLeft);
 
@@ -221,6 +225,14 @@ var __pickr = (function(){
 
 		}
 
+		try{
+			sounds.gameOver.currentTime = 0;
+			sounds.gameOver.play();	
+		} catch(err){
+
+		}
+		
+
 		gameHolder.setAttribute('data-is-active-view', 'false');
 		gameOverView.setAttribute('data-is-active-view', 'true');
 
@@ -257,6 +269,7 @@ var __pickr = (function(){
 
 		var gameState = {
 			correctSelections : correctSelections,
+			correctCount : correctCount,
 			thisRGB : thisRGB,
 			mutantRGB : mutantRGB,
 			mutant : mutant,
@@ -271,6 +284,8 @@ var __pickr = (function(){
 	}
 
 	function incorrect(evt){
+
+		correctCount = 0;
 
 		if(canInteract){
 			var element = this;
@@ -288,10 +303,15 @@ var __pickr = (function(){
 			}
 
 			livesDisplay[lives - 1].setAttribute('data-lost', 'true');
+			comboDisplay.innerHTML = "0 in a row";
+	
+			try{
+				sounds.nope.currentTime = 0;
+				sounds.nope.play();
+			} catch(err){
 
-			// sounds.nope.currentTime = 0;
-			// sounds.nope.play();
-
+			}
+	
 			if(lives - 1 > 0){
 				lives -= 1;
 			} else {
@@ -323,6 +343,9 @@ var __pickr = (function(){
 
 			correctSelections.push(mutantRGB);
 			score += Math.ceil(1 * difficulty);
+			correctCount += 1;
+
+			comboDisplay.innerHTML = correctCount + " in a row";
 
 			if(score > highScore){
 				highScore = score;
@@ -330,7 +353,7 @@ var __pickr = (function(){
 				localStorage.setItem('highScore', highScore);
 			}
 
-			if(correctSelections.length % 10 === 0 && lives < 5){
+			if(correctCount !== 0 && correctCount % 10 === 0 && lives < 5){
 				lives += 1;
 				livesDisplay[lives - 1].setAttribute('data-lost', 'false');
 			}
@@ -517,6 +540,7 @@ var __pickr = (function(){
 		colorDisplay = document.getElementById('youPicked');
 		timerDisplay = document.getElementById('runningOut');
 		livesDisplay = document.getElementById('lives').getElementsByClassName('life');
+		comboDisplay = document.getElementById('combo');
 
 		var storedHighScore = localStorage.getItem('highScore');
 
