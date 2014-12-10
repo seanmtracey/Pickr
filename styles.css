@@ -104,6 +104,19 @@ button{
 	outline: 0px solid black;
 }
 
+#startScreen #installs{
+	position: fixed;
+	width: 100%;
+	left: 0px;
+	text-align: center;
+	bottom: 5px;
+}
+
+#startScreen #installs a{
+	text-decoration: none;
+	color: rgba(0, 0, 0, 0.4);
+}
+
 #menuBtn{
 	position: fixed;
 	left: 10px;
@@ -262,6 +275,7 @@ button{
 
 #gameOver #retryControls h1{
 	color: #fb8989;
+	text-transform: uppercase;
 }
 
 #gameOver #retryControls #tryAgainBtn{
