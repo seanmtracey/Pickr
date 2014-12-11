@@ -450,7 +450,13 @@ var __pickr = (function(){
 
 	function newColor(color){
 
-		if(color === undefined){
+		var r = Math.random() * 255 | 0,
+			g = Math.random() * 255 | 0,
+			b = Math.random() * 255 | 0;
+
+		return {r : r, g : g, b : b};
+
+		/*if(color === undefined){
 			thisRGB.r = Math.random() * 255 | 0;
 			thisRGB.g = Math.random() * 255 | 0;
 			thisRGB.b = Math.random() * 255 | 0;
@@ -458,7 +464,7 @@ var __pickr = (function(){
 			thisRGB.r = color.r;
 			thisRGB.g = color.g;
 			thisRGB.b = color.b;
-		}
+		}*/
 
 	}
 
@@ -532,7 +538,16 @@ var __pickr = (function(){
 
 		startTime = Date.now() * 1;
 
-		newColor();
+		var setColor = newColor(),
+			luminosity = (0.2126 * setColor.r + 0.7152 * setColor.g + 0.0722 * setColor.b);
+
+		thisRGB = setColor;
+
+		while(luminosity < 20){
+			setColor = newColor();
+			luminosity = (0.2126 * setColor.r + 0.7152 * setColor.g + 0.0722 * setColor.b);
+		}
+
 		newMutant();
 		drawGrid(mutant);
 
