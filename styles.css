@@ -90,6 +90,10 @@ button{
 	background: #36a5eb;
 }
 
+#startScreen #welcomeControls button#begin{
+	background-color: #9893ED;
+}
+
 #startScreen #welcomeControls button#continueBtn{
 	background-color: #5EDA72;
 }

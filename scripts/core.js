@@ -36,6 +36,7 @@ var __pickr = (function(){
 		canInteract = true,
 		playingGame = false,
 		correctCount = 0,
+		withTimer = true,
 		browserLanguage = 0;
 
 	window.requestAnimationFrame = (window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame);
@@ -48,7 +49,8 @@ var __pickr = (function(){
 			difficulty : "Difficulty",
 			youScored : "You Scored",
 			inARow : "in a row",
-			begin : "start new game",
+			beginTimer : "start new game (with timer)",
+			begin : "start new game (without timer)",
 			cont : "continue game",
 			tryAgain : "try again?",
 			tagline : "One of these colors is not like the others!",
@@ -64,7 +66,8 @@ var __pickr = (function(){
 			difficulty : "Dificultate",
 			youScored : "Tu marcat",
 			inARow : "Într-un rând",
-			begin : "începe joc nou",
+			beginTimer : "începe jocul nou (cu ceas)",
+			begin : "începe joc nou (fără ceas)",
 			cont : "continua jocul",
 			tryAgain : "încearcă din nou?",
 			tagline : "Una dintre aceste culori nu este ca ceilalți!",
@@ -80,7 +83,8 @@ var __pickr = (function(){
 			difficulty : "Schwierigkeit",
 			youScored : "Sie Erzielte",
 			inARow : "In einer Reihe",
-			begin : "neues Spiel starten",
+			beginTimer : "neues spiel starten (mit uhr)",
+			begin : "neues spiel starten (ohne uhr)",
 			cont : "weiter Spiel",
 			tryAgain : "wieder?",
 			tagline : "Eine dieser Farben ist nicht wie die anderen!",
@@ -96,7 +100,8 @@ var __pickr = (function(){
 			difficulty : "Difficulté",
 			youScored : "Vous avez marqué",
 			inARow : "en rang",
-			begin : "démarrer jeu",
+			beginTimer : "démarrer jeu (avec horloge)",
+			begin : "démarrer jeu (sans horloge)",
 			cont : "continuera jeu",
 			tryAgain : "essayer à nouveau?",
 			tagline : "Un de ces couleurs ne est pas comme les autres!",
@@ -148,29 +153,34 @@ var __pickr = (function(){
 		highScoreDisplay.innerHTML = words[browserLanguage].highScore +  " " + localStorage.getItem('highScore');
 		timeLeft = game.timeLeft;
 		correctCount = game.correctCount;
+		withTimer = game.withTimer;
 
+		if(withTimer){
+			timerDisplay.setAttribute('data-visible', 'true');
+		} else {
+			timerDisplay.setAttribute('data-visible', 'false');
+		}
 
 		startTime = (Date.now() * 1) - (roundTime - timeLeft);
 
 		var e = 0,
 			f = 0;
 
-		if(correctSelections.length <= 12){
+		if(correctSelections.length <= 10){
 			difficulty = 1;
-		} else if(correctSelections.length > 12 && correctSelections.length <= 24){
+		} else if(correctSelections.length > 10 && correctSelections.length <= 20){
 			difficulty = 1.5;
-		} else if(correctSelections.length > 24 && correctSelections.length <= 36){
+		} else if(correctSelections.length > 20 && correctSelections.length <= 30){
 			difficulty = 2;
-		} else if(correctSelections.length > 36 && correctSelections.length <= 48){
+		} else if(correctSelections.length > 30 && correctSelections.length <= 40){
 			difficulty = 4;
-		} else if(correctSelections.length > 48 && correctSelections.length <= 60){
+		} else if(correctSelections.length > 40 && correctSelections.length <= 50){
 			difficulty = 5;
 		} else {
 			difficulty = 8;
 		}
 
 		difficultyDisplay.innerHTML = words[browserLanguage].difficulty + " x " + difficulty;
-
 
 		while(e < cells.length){
 
@@ -182,7 +192,6 @@ var __pickr = (function(){
 
 			e += 1;
 		}
-
 
 		cells[mutant].style.backgroundColor = "rgb(" + mutantRGB.r + "," + mutantRGB.g + "," + mutantRGB.b + ")";
 		cells[mutant].addEventListener(boop, correct, false);
@@ -257,7 +266,7 @@ var __pickr = (function(){
 
 	function drawTimer(){
 
-		if(playingGame){
+		if(playingGame && withTimer){
 			var currentTime = Date.now() * 1;
 
 			timeLeft = roundTime - (currentTime - startTime);
@@ -357,7 +366,8 @@ var __pickr = (function(){
 			score : score,
 			highScore : highScore,
 			lives :lives,
-			timeLeft : timeLeft
+			timeLeft : timeLeft,
+			withTimer : withTimer
 		};
 
 		localStorage.setItem('storedGame', JSON.stringify(gameState));
@@ -518,15 +528,15 @@ var __pickr = (function(){
 
 	function newSet(){
 
-		if(correctSelections.length <= 12){
+		if(correctSelections.length <= 10){
 			difficulty = 1;
-		} else if(correctSelections.length > 12 && correctSelections.length <= 24){
+		} else if(correctSelections.length > 10 && correctSelections.length <= 20){
 			difficulty = 1.5;
-		} else if(correctSelections.length > 24 && correctSelections.length <= 36){
+		} else if(correctSelections.length > 20 && correctSelections.length <= 30){
 			difficulty = 2;
-		} else if(correctSelections.length > 36 && correctSelections.length <= 48){
+		} else if(correctSelections.length > 30 && correctSelections.length <= 40){
 			difficulty = 4;
-		} else if(correctSelections.length > 48 && correctSelections.length <= 60){
+		} else if(correctSelections.length > 40 && correctSelections.length <= 50){
 			difficulty = 5;
 		} else {
 			difficulty = 8;
@@ -563,6 +573,7 @@ var __pickr = (function(){
 
 	function handleButtonLocales(){
 
+		document.getElementById('beginTimer').innerHTML = words[browserLanguage].beginTimer;
 		document.getElementById('begin').innerHTML = words[browserLanguage].begin;
 		document.getElementById('continueBtn').innerHTML = words[browserLanguage].cont;
 		document.getElementById('tryAgainBtn').innerHTML = words[browserLanguage].tryAgain;
@@ -576,9 +587,26 @@ var __pickr = (function(){
 
 	function addEvents(){
 		
+		document.getElementById('beginTimer').addEventListener(boop, function(){
+
+			playingGame = true;
+			withTimer = true;
+			timerDisplay.setAttribute('data-visible', 'true');
+
+			resetGame();
+			resetValues();
+			newSet();
+
+			startScreen.setAttribute('data-is-active-view', 'false');
+			gameHolder.setAttribute('data-is-active-view', 'true');
+
+		}, false);
+
 		document.getElementById('begin').addEventListener(boop, function(){
 
 			playingGame = true;
+			withTimer = false;
+			timerDisplay.setAttribute('data-visible', 'false');
 
 			resetGame();
 			resetValues();
@@ -603,6 +631,7 @@ var __pickr = (function(){
 		}, false);
 
 		document.getElementById('menuBtn').addEventListener(boop, function(){
+			
 			updateGameState();
 
 			document.getElementById('continueBtn').setAttribute('data-visible', 'true');
@@ -611,6 +640,7 @@ var __pickr = (function(){
 			gameOverView.setAttribute('data-is-active-view', 'false');
 			startScreen.setAttribute('data-is-active-view', 'true');
 			playingGame = false;
+
 		});
 			
 		var continueBtn = document.getElementById('continueBtn');
@@ -618,6 +648,7 @@ var __pickr = (function(){
 		continueBtn.addEventListener(boop, function(){
 		
 			if(checkSavedGame() !== null){
+				
 				var storedGame = JSON.parse(localStorage.getItem('storedGame'));
 				playingGame = true;
 				continueGame(storedGame);
