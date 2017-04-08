@@ -6,7 +6,10 @@ var __pickr = (function(){
 		english : 0,
 		romanian : 1,
 		german : 2,
-		french : 3
+		french : 3,
+		greek : 4,
+		spanish : 5,
+		portuguese : 6
 	};
 
 	var startScreen = undefined,
@@ -40,6 +43,8 @@ var __pickr = (function(){
 		browserLanguage = 0;
 
 	window.requestAnimationFrame = (window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame);
+
+	var twitterScore = document.querySelector('#gameOver .tweetAction a');
 
 	var words = [
 		{
@@ -110,7 +115,57 @@ var __pickr = (function(){
 			gameOver : "jeu terminé",
 			available : "Egalement disponible à partir:"
 		},
-
+		{
+			start : "αρχή",
+			score : "marquer des points",
+			highScore : "υψηλή βαθμολογία",
+			difficulty : "δυσκολία",
+			youScored : "Μπορείτε Σκόραρε",
+			inARow : "Σε μια σειρά",
+			beginTimer : "νέο παιχνίδι (με το ρολόι)",
+			begin : "νέο παιχνίδι (με το ρολόι)",
+			cont : "να συνεχίσει το παιχνίδι",
+			tryAgain : "δοκιμάστε ξανά",
+			tagline : "Ένα από αυτά τα χρώματα δεν είναι σαν τους άλλους!",
+			which : "Ποιο από τα δύο",
+			selected : "Μπορείτε σωστά διάλεξε τα εξής χρώματα...",
+			gameOver : "το παιχνίδι τελείωσε",
+			available : "Επίσης διατίθεται από:"
+		},
+		{
+			start : "Comienzo",
+			score : "Puntuación",
+			highScore : "Puntuación más alta",
+			difficulty : "Dificultad",
+			youScored : "su puntaje",
+			inARow : "en una fila",
+			beginTimer : "iniciar un nuevo juego (con temporizador)",
+			begin : "iniciar un nuevo juego (sin temporizador)",
+			cont : "continuar juego",
+			tryAgain : "inténtalo de nuevo?",
+			tagline : "Uno de estos colores no es como las otras!",
+			which : "Cúal?",
+			selected : "Usted correctamente recogido los siguientes colores ...",
+			gameOver : "JUEGO TERMINADO",
+			available : "También disponible en:"
+		},
+		{
+			start : "Começo",
+			score : "Ponto",
+			highScore : "Melhor Pontuação",
+			difficulty : "Dificuldade",
+			youScored : "Você Marcou",
+			inARow : "em uma fila",
+			beginTimer : "iniciar novo jogo (com temporizador)",
+			begin : "iniciar novo jogo (sem temporizador)",
+			cont : "continuar jogo",
+			tryAgain : "tente novamente?",
+			tagline : "Uma dessas cores não é como os outros!",
+			which : "Qual?",
+			selected : "Você escolheu corretamente as seguintes cores ...",
+			gameOver : "VOCÊ PERDER",
+			available : "Também está disponível a partir de:"
+		}
 	];
 
 	var animationTimes = {
@@ -322,6 +377,7 @@ var __pickr = (function(){
 
 		}
 		
+		twitterScore.setAttribute('href', 'https://twitter.com/intent/tweet?url=https%3A%2F%2Fsmt.codes%2Fstuff%2Fpickr%2F&text=' + encodeURI('I scored ' + score + ' on Pickr. Can anyone beat me?'));
 
 		gameHolder.setAttribute('data-is-active-view', 'false');
 		gameOverView.setAttribute('data-is-active-view', 'true');
@@ -581,7 +637,10 @@ var __pickr = (function(){
 		document.getElementById('tagQuestion').innerHTML = words[browserLanguage].which;
 		document.getElementById('correctlyGot').innerHTML = words[browserLanguage].selected;
 		document.getElementById('govDisplay').innerHTML = words[browserLanguage].gameOver;
-		document.getElementById('available').innerHTML = words[browserLanguage].available;
+
+		if(document.getElementById('installs') !== null){
+			document.getElementById('available').innerHTML = words[browserLanguage].available;	
+		}
 
 	}
 
@@ -682,12 +741,20 @@ var __pickr = (function(){
 		livesDisplay = document.getElementById('lives').getElementsByClassName('life');
 		comboDisplay = document.getElementById('combo');
 
-		if(navigator.language === "ro" || navigator.language === "ro-RO"){
+		var navLanguage = navigator.language.toLowerCase();
+
+		if(navLanguage === "ro" || navLanguage === "ro-ro"){
 			browserLanguage = languages.romanian;
-		} else if(navigator.language === "de"){
+		} else if(navLanguage === "de"){
 			browserLanguage = languages.german;
-		} else if(navigator.language === "fr"){
+		} else if(navLanguage === "fr"){
 			browserLanguage = languages.french;
+		} else if(navLanguage === "el"){
+			browserLanguage = languages.greek;
+		} else if(navLanguage === "es" || navLanguage === "es-ar" || navLanguage === "es-bo" || navLanguage === "es-cl" || navLanguage === "es-co" || navLanguage === "es-cr" || navLanguage === "es-do" || navLanguage === "es-ec" || navLanguage === "es-sv" || navLanguage === "es-gt" || navLanguage === "es-hn" || navLanguage === "es-mx" || navLanguage === "es-ni" || navLanguage === "es-pa" || navLanguage === "es-py" || navLanguage === "es-pe" || navLanguage === "es-pr" || navLanguage === "es-es" || navLanguage === "es-uy" || navLanguage === "es-ve"){
+			browserLanguage = languages.spanish;
+		} else if(navLanguage === "pt" || navLanguage === "pt-br"){
+			browserLanguage = languages.portuguese;
 		}
 
 		handleButtonLocales();

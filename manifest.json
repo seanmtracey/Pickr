@@ -1,0 +1,14 @@
+{
+  "name": "Pickr",
+  "short_name": "Pickr",
+  "start_url": "/stuff/pickr/index.html?homescreen=1",
+  "display": "standalone",
+  "icons": [{
+        "src": "/assets/images/icon.png",
+        "sizes": "300x300",
+        "type": "image/png"
+      }],
+  "background_color": "#F5F5F5",
+  "theme_color": "#000000",
+  "description" : "One of these colors is not like the others! Can you pick which one?"
+}
